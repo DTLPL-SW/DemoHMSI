@@ -1,0 +1,5 @@
+(Information)_AdvicsLoginScreen::LoginScreen_Load():::17_11_2023_12_54_02_PM :: Initialize Application
+(Information)_AdvicsLoginScreen::LoginScreen_Load():::17_11_2023_12_54_02_PM :: Dashtech  ::  Version1.0.0.0
+(Error)_CheckPointStore::CheckPointStore_Load():::17_11_2023_12_54_07_PM :: Could not load file or assembly 'WebCam_Capture, Version=1.0.2395.24959, Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.
+(Information)_AdvicsLoginScreen::LoginScreen_Load():::17_11_2023_12_54_10_PM :: Initialize Application
+(Information)_AdvicsLoginScreen::LoginScreen_Load():::17_11_2023_12_54_10_PM :: Dashtech  ::  Version1.0.0.0
