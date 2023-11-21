@@ -22,6 +22,8 @@ namespace DemoApplicationHMSI.Forms.Transaction
         WinFormCharpWebCam webcam;
         int iCellIndex = 0;
         DL_CheckPointList obj = new DL_CheckPointList();
+        public int iOldWebCamCode = 1;
+
         public CheckPointStore()
         {
             InitializeComponent();
@@ -111,7 +113,12 @@ namespace DemoApplicationHMSI.Forms.Transaction
                 {
                     if (i == iCellIndex)
                     {
-                        dgvData.Rows[i].Cells[10].Value = Bitmap.FromFile(pathFolder + nameCapture);
+                        Bitmap resizedIcon = new Bitmap(16, 16);
+                        using (Graphics g = Graphics.FromImage(resizedIcon))
+                        {
+                            g.DrawImage(Bitmap.FromFile(pathFolder + nameCapture), new Rectangle(0, 0, 16, 16));
+                        }
+                        dgvData.Rows[i].Cells[10].Value = resizedIcon;
                         pnlCaptureImage.Visible = false;                       
                     }
                 }
@@ -288,12 +295,17 @@ namespace DemoApplicationHMSI.Forms.Transaction
             try
             {
                 BindCheckPointList();
-                //if (webcam == null)
-                //{
-                //    webcam = new WinFormCharpWebCam();
-                //    webcam.InitializeWebCam(ref imgCam);
-                //}
-                
+                imgCam.Visible = false;
+                if (iOldWebCamCode == 0)
+                {
+                    imgCam.Visible = true;
+                    // 
+                    if (webcam == null)
+                    {
+                        webcam = new WinFormCharpWebCam();
+                        webcam.InitializeWebCam(ref imgCam);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -312,7 +324,14 @@ namespace DemoApplicationHMSI.Forms.Transaction
                     {
                         pnlCaptureImage.Visible = true;
                         iCellIndex = e.RowIndex;
-                        OpenCamera();
+                        if (iOldWebCamCode == 0)
+                        {
+                            webcam.Start();
+                        }
+                        else
+                        {
+                            OpenCamera();
+                        }
                     }
                 }
             }
@@ -346,26 +365,20 @@ namespace DemoApplicationHMSI.Forms.Transaction
         {
             try
             {
-                needSnapshot = true;
-            }
-            catch (Exception ex)
-            {
-                PCommon.mAppLog.WriteLog(ex.Message, DTPLLogsWrite.LogType.Error, MethodBase.GetCurrentMethod());
-                blCommon.ShowMessage(ex.Message, 3);
-            }
-        }
-
-        private void btnUploadImage_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                for (int i = 0; i < dgvData.Rows.Count; i++)
+                if (iOldWebCamCode == 0)
                 {
-                    if (i == iCellIndex)
+                    for (int i = 0; i < dgvData.Rows.Count; i++)
                     {
-                        dgvData.Rows[i].Cells[10].Value = imgCam.Image;
-                        pnlCaptureImage.Visible = false;
+                        if (i == iCellIndex)
+                        {
+                            dgvData.Rows[i].Cells[10].Value = imgCam.Image;
+                            pnlCaptureImage.Visible = false;
+                        }
                     }
+                }
+                else
+                {
+                    needSnapshot = true;
                 }
             }
             catch (Exception ex)
